@@ -1,1 +1,1 @@
-Trabalhos desenvolvidos ao longo da pós-graduação em Inteligência Artificial.
+Estudo sobre redes neurais e suas principais aplicações
