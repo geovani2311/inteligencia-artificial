@@ -1,35 +1,44 @@
-import pandas as pd
-import numpy as np
 import math 
 import random
+import pandas as pd
 
-#dados de entrada
-#porta xor
-x1 = [0,0,1,1]
-x2 = [0,1,0,1]
-classe = [0,1,0,1]
+# Porta XOR
+x1 = [0, 0, 1, 1]
+x2 = [0, 1, 0, 1]
+classe = [0, 1, 1, 0]
 
-#pesos gerados aleatoriamente depois diminuir o codigo
-peso1 = random.random()
-peso2 = random.random()
-peso3 = random.random()
-peso4 = random.random()
-print(peso1,peso2)
+# Função soma 
+def funcao_soma(x1, peso1, x2, peso2):
+    return (x1 * peso1) + (x2 * peso2)
 
-def funcao_soma():
-    soma = (x1 * peso1) + (x2 * peso2)
-    return soma
+# Função sigmoide ativação
+def funcao_sigmoide_ativacao(x):
+    return 1 / (1 + math.exp(-x))
 
-def funcao_sigmoide_ativacao():
-    sigmoide = 1 / (1 + math.exp(-x))
-    return sigmoide
+# Lista para armazenar os dados
+resultados = []
 
-#executando a rede neural, ou pelo menos "tentando"
-def rede_neural():
-    (x1[0] * peso1) +  (x2[0] * peso2)
-    (x1[0] * peso1) +  (x2[0] * peso2)
+# Simulação
+for i in range(4):
+    peso1 = random.random()
+    peso2 = random.random()
+    
+    soma = funcao_soma(x1[i], peso1, x2[i], peso2)
+    ativacao = funcao_sigmoide_ativacao(soma)
+    erro = classe[i] - ativacao
+    
+    resultados.append({
+        "x1": x1[i],
+        "x2": x2[i],
+        #"peso1": round(peso1, 4),
+        #"peso2": round(peso2, 4),
+        "classe": classe[i],
+        "saida": round(ativacao, 4),
+        "erro": round(erro, 4)
+    })
 
+# Criar DataFrame
+df_resultados = pd.DataFrame(resultados)
 
-neuronio_1 = (x1[0] * peso1) +  (x2[0] * peso2)
-neuronio_2 = (x1[0] * peso1) +  (x2[0] * peso2)
-print(neuronio_1,neuronio_2)
+# Mostrar
+print(df_resultados)
