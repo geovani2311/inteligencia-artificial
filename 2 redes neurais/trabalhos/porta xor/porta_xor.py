@@ -8,7 +8,7 @@ x2 = [0, 1, 0, 1]
 classe = [0, 1, 1, 0]
 
 # parâmetros
-taxa_aprendizado = 0.5
+taxa_aprendizado = 0.9
 epocas = 100
 
 # pesos iniciais
