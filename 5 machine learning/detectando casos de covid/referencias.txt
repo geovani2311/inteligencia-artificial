@@ -1,3 +1,7 @@
-https://scikit-learn.org/stable/modules/cross_validation.html
+Achados da COVID-19 identificados na tomografia computadorizada de tórax: ensaio pictórico
+https://www.scielo.br/j/eins/a/sP9DRDdfTWpR6ZvZkqXxHXx/?lang=pt
 
-https://www.geeksforgeeks.org/machine-learning/cross-validation-machine-learning/
+
+Inteligência artificial, aprendizado de máquina, diagnóstico auxiliado por computador e radiômica: avanços da imagem rumo à medicina de precisão
+https://www.scielo.br/j/rb/a/9yX6w83KDDT33m6G9ddCqBn/?lang=pt
+
