@@ -1,0 +1,6 @@
+streamlit
+pandas
+numpy
+tensorflow
+scikit-learn
+# Adicione quaisquer outras bibliotecas que seu projeto use aqui
