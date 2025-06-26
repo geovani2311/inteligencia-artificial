@@ -1,0 +1,97 @@
+Exercício 1
+
+1. Visualmente, o atributo tamanho é mais razoável para prever o preço.
+Ele apresenta uma relação linear mais forte e consistente, e o modelo consegue capturar essa relação com muito mais precisão do que com quartos.
+O atributo número de quartos mostra baixa capacidade preditiva.
+Casas com o mesmo número de quartos podem variar muito de preço, então esse atributo não é bom para prever o preço sozinho.
+
+2. Sim, os valores de RSS e R² confirmam visualmente que o modelo baseado em tamanho é melhor.
+O gráfico mostrou uma tendência clara com tamanho, e as métricas (R² alto e RSS mais aceitável) comprovam isso.
+Dados da análise: 
+RSS for size-based model: preco    8.407789e+10
+RSS for rooms-based model: preco    2.075244e+11
+R2 for size-based model: 0.4213611099503459
+R2 for rooms-based model: -21.352465761008933
+
+
+Exercício 2
+
+1. A variável TV é um bom preditor de sales.
+Ela apresenta correlação clara, e o modelo linear parece funcionar bem.
+A variável radio também ajuda a explicar as vendas, mas com menos força que TV.
+Ainda pode ser útil, mas sozinha não é tão forte.
+Já newspaper não é um bom preditor isolado de sales.
+Visualmente, ele não apresenta uma relação linear significativa.
+
+2. O modelo baseado em TV é claramente o melhor. Ele tem o menor erro (RSS), o único R² positivo e aanálise visual também indicava uma tendência linear consistente
+Os modelos com radio e newspaper não são bons preditores sozinhos — especialmente newspaper, que deve ser descartado como variável isolada.
+
+Exercício 3
+
+1. Ao comparar os modelos de Regressão Linear e KNN Regressor, observamos que no conjunto Advertising ambos obtiveram bom desempenho, 
+com o KNN ligeiramente superior no treino, mas com desempenho similar na validação, indicando boa generalização. Já no conjunto Portland,
+o KNN teve alto R² no treino, mas caiu bastante na validação, o que sugere overfitting. A Regressão Linear, por outro lado, teve desempenho 
+mais equilibrado entre treino e teste, demonstrando melhor capacidade de generalização nesse caso. Isso mostra que, embora o KNN possa 
+capturar padrões mais complexos, ele é mais propenso a overfitting, enquanto a Regressão Linear é mais estável e interpretável.
+
+2. 
+    1. Resultados:
+    Nos dados de Advertising tanto a Regressão Linear quanto o KNN geraram modelos com bons desempenho tanto no treino como na validação.
+        KNN Advertising - Conjunto de Treinamento:
+            R²:  0.9461
+            RSS: 223.84
+        KNN Advertising - Conjunto de Validação:
+            R²:  0.9106
+            RSS: 112.85
+        Linear Regression Advertising - Conjunto de Treinamento:
+            R²:  0.8957
+            RSS: 432.82
+        Linear Regression Advertising - Conjunto de Validação:
+            R²:  0.8994
+            RSS: 126.96
+
+        No entanto, para a base Portland o desempenho do modelo usando KNN ficou muito abaixo daquele do treino
+        KNN Portland - Conjunto de Treinamento:
+            R²:  0.7280
+            RSS: 133308548468.96
+        KNN Portland - Conjunto de Validação:
+            R²:  0.3209
+            RSS: 120536144545.32
+        Linear Regression Portland - Conjunto de Treinamento:
+            R²:  0.7691
+            RSS: 113155960559.48
+        Linear Regression Portland - Conjunto de Validação:
+            R²:  0.5149
+            RSS: 86104245447.78
+
+    2. O desempenho dos modelos em que não houve separação dos dados entre treino e teste permaneceu igual, para os dados de treino e validação que são os mesmos.
+    Isto é esperado já que o modelo é avaliado exatamente com os mesmos dados que o originaram. Sendo assim, não é possível dizer que os modelos treinados no dataset
+    completo generalizam, são necessários novos dados para esta validação.
+
+        KNN Advertising no data split - Conjunto de Treinamento:
+            R²:  0.9529
+            RSS: 254.91
+        KNN Advertising no data split - Conjunto de Validação:
+            R²:  0.9529
+            RSS: 254.91
+
+        Linear Regression Advertising no data split - Conjunto de Treinamento:
+            R²:  0.8972
+            RSS: 556.83
+        Linear Regression Advertising no data split - Conjunto de Validação:
+            R²:  0.8972
+            RSS: 556.83
+
+        KNN Portland no data split - Conjunto de Treinamento:
+            R²:  0.7612
+            RSS: 171711455581.56
+        KNN Portland no data split - Conjunto de Validação:
+            R²:  0.7612
+            RSS: 171711455581.56
+
+        Linear Regression Portland no data split - Conjunto de Treinamento:
+            R²:  0.7329
+            RSS: 192068324756.67
+        Linear Regression Portland no data split - Conjunto de Validação:
+            R²:  0.7329
+            RSS: 192068324756.67

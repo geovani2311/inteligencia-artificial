@@ -1,0 +1,128 @@
+Exercício 1
+
+    1. Sim, de forma muito suave
+    === Regressão SGD para 'tv' → 'sales' ===
+    Intercepto: 14.02085
+    Coeficiente: 4.07521
+
+    === Regressão SGD para 'tv' → 'sales' ===
+    Intercepto: 14.00175
+    Coeficiente: 4.06188
+
+    === Regressão SGD para 'tv' → 'sales' ===
+    Intercepto: 14.01305
+    Coeficiente: 4.06761
+
+    === Regressão SGD para 'tamanho' → 'preco' ===
+    Intercepto: 340039.77351
+    Coeficiente: 105612.16857
+
+    === Regressão SGD para 'tamanho' → 'preco' ===
+    Intercepto: 340217.95241
+    Coeficiente: 105682.56246
+
+    === Regressão SGD para 'tamanho' → 'preco' ===
+    Intercepto: 340214.15738
+    Coeficiente: 105646.08360
+
+    2. Comparando graficamente, são bem similares
+
+Exercício 2
+    1. Sim, nos dois casos, apesar de pequeno ainda houve um aumento no valor de R^2 para a base Portland utilizando todos os dados.
+
+        === Regressão SGD para ['tv'] → 'sales' ===
+        RSS: 2102.53
+        R²: 0.61187
+
+        === Regressão SGD para ['radio'] → 'sales' ===
+        RSS: 3618.49
+        R²: 0.33203
+
+        === Regressão SGD para ['newspaper'] → 'sales' ===
+        RSS: 5134.83
+        R²: 0.05212
+
+        === Regressão SGD para ['tamanho'] → 'preco' ===
+        RSS: 193464961266.43
+        R²: 0.73100
+
+        === Regressão SGD para ['quartos'] → 'preco' ===
+        RSS: 578535566006.07
+        R²: 0.19559
+
+        === Regressão SGD para ['tv', 'radio', 'newspaper'] → 'sales' ===
+        RSS: 556.88
+        R²: 0.89720
+
+        === Regressão SGD para ['tamanho', 'quartos'] → 'preco' ===
+        RSS: 192082007362.89
+        R²: 0.73293
+    
+    2. Sim, para a base Advertising o atributo newspaper poderia ser desconsiderado, e para a base Portland o atributo quartos.
+    3. A implementação com o método dos mínimos quadrados é mais rápida pois as bases são pequenas e tudo é calculado de uma vez só, sem precisar de iterações.
+
+Exercício 3
+    1. Advertising - Os resíduos não estão perfeitamente aleatórios em torno de zero. Parece haver uma curvatura em "U" ou um padrão sistemático:
+    
+        Valores baixos e altos de sales tendem a ter resíduos positivos.
+        Valores médios têm resíduos negativos.
+        Esse padrão sugere que o modelo pode estar subestimando nas extremidades e superestimando no meio.
+        Isso pode indicar uma relação não linear que a regressão linear não está capturando bem.
+
+       Portland - Os resíduos parecem mais espalhados aleatoriamente, mas:
+
+        Há maior variância dos resíduos em valores previstos mais altos.
+        A regressão linear explica bem o centro dos dados, mas pode ser menos confiável nos extremos (casas muito baratas ou muito caras).
+        Talvez variáveis importantes estejam faltando (ex: localização, idade da casa).
+
+    2. Os modelos usando p-values apresentaram desempenho muito similar aos modelos usando todas as varáveis
+        Advertising - P-valores dos preditores:
+            const        1.267295e-17
+            tv           1.509960e-81
+            radio        1.505339e-54
+            newspaper    8.599151e-01
+
+            Variáveis significativas: ['tv', 'radio']
+
+        Desempenho do modelo:
+            Regressão linear - variáveis significativas:
+            MSE: 2.784569900338091
+            R²: 0.8971942610828957
+
+            Regressão SGD - todas as variáveis
+            RSS: 556.88
+            R²: 0.89720
+
+        Portland - P-valores dos preditores:
+            const      3.749876e-02
+            tamanho    4.222279e-12
+            quartos    5.745779e-01
+
+            Variáveis significativas: ['tamanho']
+
+        Desempenho do modelo:
+            Regressão linear - variáveis significativas:
+            MSE: 4116265480.866083
+            R²: 0.7310037839755306
+            
+            Regressão SGD - todas as variáveis
+            RSS: 192082007362.89
+            R²: 0.73293
+
+Exercício 4
+
+    1. Não, as variãveis preditivas não apresentam correlação entre si em nenhum dos modelos.
+
+        === VIF para  sales  ===
+            Variável       VIF
+        0      const  6.848900
+        1         tv  1.004611
+        2      radio  1.144952
+        3  newspaper  1.145187
+        
+        === VIF para  preco  ===
+        Variável        VIF
+        0    const  18.783221
+        1  tamanho   1.456799
+        2  quartos   1.456799
+
