@@ -1,9 +1,9 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
+import plotly.express as px
 
 # --- Configuração inicial ---
-st.set_page_config(page_title="Rotinas e Hábitos", page_icon="✅", layout="centered")
+st.set_page_config(page_title="Rotinas e Hábitos", page_icon="✅", layout="wide")
 st.title("📅 Gerenciador de Rotinas e Hábitos")
 
 # --- Inicializa os dados na sessão ---
@@ -61,7 +61,7 @@ if st.session_state.mostrar_form:
         observacoes = st.text_area("Observações (opcional)")
         colf1, colf2 = st.columns(2)
         adicionar = colf1.form_submit_button("Adicionar")
-        cancelar = colf2.form_submit_button("Cancelar")
+        cancelar = colf2.form_submit_button("Fechar")
 
         if adicionar:
             if tarefa.strip() != "":
@@ -74,32 +74,23 @@ if st.session_state.mostrar_form:
         if cancelar:
             st.session_state.mostrar_form = False
 
-# --- Dashboard ---
+# --- Dashboard com Plotly Express ---
 if st.session_state.mostrar_dashboard and not st.session_state.tarefas.empty:
     st.markdown("## 📊 Dashboard de Rotinas")
 
-    # Gráfico de tarefas por categoria
-    fig_cat, ax_cat = plt.subplots()
-    st.session_state.tarefas["Categoria"].value_counts().plot(kind="bar", ax=ax_cat)
-    ax_cat.set_title("Tarefas por Categoria")
-    ax_cat.set_xlabel("Categoria")
-    ax_cat.set_ylabel("Quantidade")
-    st.pyplot(fig_cat)
+    # Corrigindo para evitar erro com value_counts().reset_index()
+    df_cat = st.session_state.tarefas["Categoria"].value_counts().reset_index()
+    df_cat.columns = ["Categoria", "Quantidade"]
+    fig_cat = px.bar(df_cat, x="Categoria", y="Quantidade", title="Tarefas por Categoria")
+    st.plotly_chart(fig_cat, use_container_width=True)
 
-    # Gráfico de status das tarefas
-    fig_status, ax_status = plt.subplots()
-    st.session_state.tarefas["Status"].value_counts().plot(kind="pie", autopct='%1.1f%%', ax=ax_status)
-    ax_status.set_ylabel("")
-    ax_status.set_title("Distribuição por Status")
-    st.pyplot(fig_status)
+    fig_status = px.pie(st.session_state.tarefas, names="Status", title="Distribuição por Status")
+    st.plotly_chart(fig_status, use_container_width=True)
 
-    # Gráfico de prioridade
-    fig_prioridade, ax_prioridade = plt.subplots()
-    st.session_state.tarefas["Prioridade"].value_counts().plot(kind="bar", ax=ax_prioridade)
-    ax_prioridade.set_title("Tarefas por Prioridade")
-    ax_prioridade.set_xlabel("Prioridade")
-    ax_prioridade.set_ylabel("Quantidade")
-    st.pyplot(fig_prioridade)
+    df_prioridade = st.session_state.tarefas["Prioridade"].value_counts().reset_index()
+    df_prioridade.columns = ["Prioridade", "Quantidade"]
+    fig_prioridade = px.bar(df_prioridade, x="Prioridade", y="Quantidade", title="Tarefas por Prioridade")
+    st.plotly_chart(fig_prioridade, use_container_width=True)
 
 # --- Ordenar tabela ---
 if not st.session_state.tarefas.empty and not st.session_state.mostrar_dashboard:
