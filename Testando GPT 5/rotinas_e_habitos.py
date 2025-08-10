@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+import matplotlib.pyplot as plt
 
 # --- Configuração inicial ---
 st.set_page_config(page_title="Rotinas e Hábitos", page_icon="✅", layout="centered")
@@ -39,7 +39,7 @@ if st.session_state.mostrar_remover and not st.session_state.tarefas.empty:
     tarefas_remover = st.multiselect("Selecione tarefas para remover", st.session_state.tarefas["Tarefa"].tolist(), key="remover_popup")
     colr1, colr2 = st.columns(2)
     confirmar = colr1.button("Confirmar remoção")
-    cancelar_remover = colr2.button("Cancelar")
+    cancelar_remover = colr2.button("Fechar")
 
     if confirmar and tarefas_remover:
         st.session_state.tarefas = st.session_state.tarefas[~st.session_state.tarefas["Tarefa"].isin(tarefas_remover)].reset_index(drop=True)
@@ -77,18 +77,29 @@ if st.session_state.mostrar_form:
 # --- Dashboard ---
 if st.session_state.mostrar_dashboard and not st.session_state.tarefas.empty:
     st.markdown("## 📊 Dashboard de Rotinas")
-    
+
     # Gráfico de tarefas por categoria
-    fig_cat = px.histogram(st.session_state.tarefas, x="Categoria", title="Tarefas por Categoria", color="Categoria")
-    st.plotly_chart(fig_cat, use_container_width=True)
-    
+    fig_cat, ax_cat = plt.subplots()
+    st.session_state.tarefas["Categoria"].value_counts().plot(kind="bar", ax=ax_cat)
+    ax_cat.set_title("Tarefas por Categoria")
+    ax_cat.set_xlabel("Categoria")
+    ax_cat.set_ylabel("Quantidade")
+    st.pyplot(fig_cat)
+
     # Gráfico de status das tarefas
-    fig_status = px.pie(st.session_state.tarefas, names="Status", title="Distribuição por Status")
-    st.plotly_chart(fig_status, use_container_width=True)
-    
+    fig_status, ax_status = plt.subplots()
+    st.session_state.tarefas["Status"].value_counts().plot(kind="pie", autopct='%1.1f%%', ax=ax_status)
+    ax_status.set_ylabel("")
+    ax_status.set_title("Distribuição por Status")
+    st.pyplot(fig_status)
+
     # Gráfico de prioridade
-    fig_prioridade = px.histogram(st.session_state.tarefas, x="Prioridade", title="Tarefas por Prioridade", color="Prioridade")
-    st.plotly_chart(fig_prioridade, use_container_width=True)
+    fig_prioridade, ax_prioridade = plt.subplots()
+    st.session_state.tarefas["Prioridade"].value_counts().plot(kind="bar", ax=ax_prioridade)
+    ax_prioridade.set_title("Tarefas por Prioridade")
+    ax_prioridade.set_xlabel("Prioridade")
+    ax_prioridade.set_ylabel("Quantidade")
+    st.pyplot(fig_prioridade)
 
 # --- Ordenar tabela ---
 if not st.session_state.tarefas.empty and not st.session_state.mostrar_dashboard:
