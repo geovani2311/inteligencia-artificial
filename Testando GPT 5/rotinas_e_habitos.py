@@ -209,7 +209,7 @@ if st.session_state.mostrar_dashboard and not st.session_state.tarefas.empty:
             "Status": str,
             "Observações": str,
         })
-        st.session_state.tarefas = df_full.reset_index(drop=True)
+        st.session_state.tarefas = df_full.reset_index(drop=True) 
         st.success("Tarefas atualizadas!")
         st.experimental_rerun()
 
