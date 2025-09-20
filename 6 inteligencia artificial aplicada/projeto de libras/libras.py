@@ -49,4 +49,4 @@ print("Aplicacao finalizada.")
 # Procura uma mão na foto.
 # Se achar, desenha um esqueleto sobre ela.
 # Mostra a foto na tela.
-# Repete tudo de novo.
+# Repete tudo de novo.   
