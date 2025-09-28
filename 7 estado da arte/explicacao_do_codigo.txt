@@ -1,0 +1,88 @@
+Explicação do seu Código de Visão Computacional
+E aí! Vamos dar uma olhada no seu código. Ele é bem bacana e usa ferramentas super poderosas. Basicamente, você criou uma página da web interativa que funciona como um "tira-teima" para analisar a técnica de um chute no futebol.
+
+Vou quebrar ele em partes pra gente entender junto, beleza?
+
+Parte 1: A Preparação (Os "Ingredientes")
+No começo do código, você importa várias bibliotecas. Pense nelas como caixas de ferramentas:
+
+import streamlit as st: Essa é a ferramenta que cria a interface da sua aplicação web. Todos os botões, títulos, colunas e locais para carregar arquivos são feitos com o Streamlit. É o que transforma seu script Python em uma página interativa.
+
+import cv2: Essa é a OpenCV, a principal ferramenta para "ver" e manipular imagens e vídeos. É ela que abre o vídeo, lê cada quadro (frame) e desenha coisas na tela, como os textos com os ângulos.
+
+import mediapipe as mp: Essa é a "mágica" do projeto. O MediaPipe, do Google, é uma biblioteca de inteligência artificial que já vem treinada para encontrar partes do corpo humano em uma imagem. É ele que vai te dar as coordenadas do joelho, tornozelo, quadril, etc.
+
+import numpy as np: É uma biblioteca para fazer cálculos matemáticos complexos de forma rápida, principalmente com listas de números (arrays). Você a usa para ajudar a calcular os ângulos.
+
+import tempfile e import time: São ajudantes. tempfile cria um arquivo temporário para o vídeo (o OpenCV lida melhor com arquivos físicos), e time serve para dar uma pequena pausa e controlar a velocidade do vídeo.
+
+Parte 2: O Cérebro da Matemática (calculate_angle)
+Essa função é a "calculadora" do seu projeto. O que ela faz?
+
+def calculate_angle(a, b, c):
+    # ... código ...
+    return angle
+
+Recebe 3 pontos: a, b e c. Imagine que são o quadril (a), o joelho (b) e o tornozelo (c).
+
+O objetivo é calcular o ângulo no ponto do meio (b), ou seja, o ângulo do joelho.
+
+Ela usa um pouco de trigonometria (np.arctan2) para descobrir o ângulo entre a "linha quadril-joelho" e a "linha joelho-tornozelo".
+
+No final, ela te devolve esse ângulo em graus. É uma função super útil e a base de toda a análise biomecânica que você está fazendo.
+
+Parte 3: Onde a Mágica Acontece (process_video)
+Essa é a função principal, o coração do seu analisador. Ela pega um arquivo de vídeo e faz todo o trabalho pesado. Vamos ver o passo a passo do que acontece dentro dela:
+
+Loop Principal (while cap.isOpened()): O código começa a ler o vídeo, quadro a quadro, como se estivesse passando as páginas de um livro.
+
+Conversão de Cor (cv2.cvtColor): Um detalhe técnico. O OpenCV lê as imagens no padrão BGR (Azul, Verde, Vermelho), mas o MediaPipe espera o padrão RGB (Vermelho, Verde, Azul). Então, você converte a imagem para o formato que o MediaPipe entende, e depois converte de volta para o OpenCV poder mostrar na tela.
+
+Detecção da Pose (results = pose.process(image)): Essa é a linha mais importante! Você entrega o quadro do vídeo para o MediaPipe, e ele te devolve um objeto results contendo as coordenadas de todos os 33 pontos do corpo (os "landmarks") que ele encontrou.
+
+Extraindo os Pontos (try...except):
+
+Dentro do try, você pega as coordenadas x e y dos pontos que te interessam: quadril, joelho e tornozelo das pernas direita e esquerda.
+
+Suposição: Aqui, você assume que a perna direita é a do chute e a esquerda é a de apoio. Para este projeto, funciona perfeitamente!
+
+Você chama a sua função calculate_angle para descobrir os ângulos do joelho da perna de chute e da perna de apoio naquele exato momento.
+
+Guardando os Recordes: A cada quadro, você verifica:
+
+"O ângulo da perna de chute atual é o maior que eu já vi até agora?" Se for, você guarda esse valor em max_kick_leg_angle.
+
+"O ângulo da perna de apoio atual é o menor (mais dobrado) que eu já vi?" Se for, você guarda em min_support_leg_angle.
+
+Desenhando na Tela:
+
+cv2.putText(...): Você usa o OpenCV para escrever o valor dos ângulos diretamente no vídeo, perto de cada joelho.
+
+mp_drawing.draw_landmarks(...): Você usa o MediaPipe para desenhar o "esqueleto" da pessoa, conectando os pontos do corpo. Isso ajuda muito a visualizar a pose.
+
+Atualizando a Página (frame_placeholder e metrics_placeholder):
+
+O Streamlit é inteligente. Em vez de recarregar a página inteira a cada quadro, você criou "espaços vazios" (st.empty()) no início.
+
+A cada ciclo do loop, você simplesmente atualiza esses espaços: um com a nova imagem (o vídeo rodando) e o outro com as métricas de "recorde" atualizadas. Fica super fluido!
+
+Parte 4: A Vitrine (Interface do Streamlit)
+Todo o resto do código é a montagem da "vitrine" da sua loja, a página web.
+
+st.set_page_config, st.title, st.markdown: Configuram o título, o layout e os textos de introdução da página.
+
+st.columns(2): Divide a tela em colunas para você poder colocar os vídeos lado a lado, o que é perfeito para comparação.
+
+st.file_uploader: Cria os botões para o usuário carregar os vídeos do computador.
+
+if st.button("▶️ Iniciar Análise Comparativa"): A ação principal só começa quando o usuário clica neste botão.
+
+Chamada e Exibição: Ao clicar, ele chama a função process_video para cada um dos vídeos, um na coluna da esquerda e outro na da direita.
+
+Resumo Comparativo: Depois que os dois vídeos terminam, ele usa os valores finais retornados pela função para montar um resumo bem legal com o st.metric, mostrando os resultados finais e a diferença ("delta") entre o profissional e o amador.
+
+Insights: Por fim, ele usa uns ifs simples para comparar os resultados e dar um feedback automático, dizendo quem teve mais potência ou mais estabilidade.
+
+Resumindo o fluxo: O usuário sobe os vídeos > clica no botão > seu código processa cada vídeo quadro a quadro, usando o MediaPipe para achar o corpo e sua função para calcular os ângulos > enquanto isso, ele vai desenhando tudo na tela e, no final, apresenta um placar comparativo.
+
+Seu código está muito bem estruturado e a lógica está perfeita para o que você se propôs a fazer. Parabéns pelo projeto!
