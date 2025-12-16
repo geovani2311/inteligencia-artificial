@@ -1,0 +1,183 @@
+{
+  "name": "social_media",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "38bb04bb-d8e8-4c5d-a8da-ebdc01bda4bf",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        2176,
+        1168
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "spreadsheetId",
+              "value": "1JlU-s9lJt2v_R__5SuEk0541tmOqm-ALqa2vH3R4Z1s",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "sheetId",
+              "value": "1665157980",
+              "type": "string"
+            },
+            {
+              "id": "id-3",
+              "name": "recipientEmail",
+              "value": "<__PLACEHOLDER_VALUE__Recipient email address for insights__>",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "638b9429-0db1-48e8-a834-8ea2bb994698",
+      "name": "Workflow Configuration",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2400,
+        1168
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://docs.google.com/spreadsheets/d/1JlU-s9lJt2v_R__5SuEk0541tmOqm-ALqa2vH3R4Z1s/edit?usp=sharing",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "01410ce7-f466-4af0-9913-dfdc77607faf",
+      "name": "Export Sheet as Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2624,
+        1168
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "text": "You are a marketing data analyst expert. Analyze this marketing dashboard image in detail. Provide:\n\n1. Executive Summary (2-3 sentences)\n2. Key Performance Metrics identified\n3. Top performing channels/campaigns\n4. Areas of concern or underperformance\n5. Actionable recommendations for optimization\n6. Notable trends or patterns\n\nBe specific with numbers and percentages you can see in the dashboard. Focus on business impact and actionable insights.",
+        "inputType": "binary",
+        "options": {}
+      },
+      "id": "7aa2ff0f-d165-4ab2-b685-65ee73aa374f",
+      "name": "Analyze Dashboard with Gemini Vision",
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        2848,
+        1168
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "RguENHYMMnW1CAew",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "=geovanne.lima2311@gmail.com",
+        "subject": "=Marketing Dashboard Analysis - {{ new Date().toLocaleDateString() }}",
+        "emailType": "text",
+        "message": "={{ $json.content.parts[0].text }}",
+        "options": {}
+      },
+      "id": "3e9782be-de46-4d73-b16b-07157a74907c",
+      "name": "Send Insights via Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        3072,
+        1168
+      ],
+      "webhookId": "e73f6d03-b435-4c3a-8d99-f08413f32544",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "R7r8BTONvWMCtlp0",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Workflow Configuration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Workflow Configuration": {
+      "main": [
+        [
+          {
+            "node": "Export Sheet as Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Export Sheet as Image": {
+      "main": [
+        [
+          {
+            "node": "Analyze Dashboard with Gemini Vision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Dashboard with Gemini Vision": {
+      "main": [
+        [
+          {
+            "node": "Send Insights via Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "34164692-3150-4f00-8a01-73e70dc10ee0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "687d0cf469826dae1ab1455fd30f39f55128b475284c11de27306ced22441a62"
+  },
+  "id": "CYP50Y4HcUrXfcoz",
+  "tags": []
+}
